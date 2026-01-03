@@ -156,23 +156,32 @@ class LightweightColorization3D(nn.Module):
         return reconstructed_3d
 
 
-def get_model(model_type='full', **kwargs):
+def get_model(model_type='full', base_features_3d=32, num_slices=16):
     """
     Factory function to get the appropriate model
     
     Args:
         model_type: 'full', 'lightweight', or 'attention'
-        **kwargs: Additional arguments for model initialization
+        base_features_3d: Base features for 3D reconstruction
+        num_slices: Number of slices for 3D reconstruction
     
     Returns:
         model: Initialized model
     """
     if model_type == 'full':
-        return MedicalImageColorization3D(use_attention=False, **kwargs)
+        return MedicalImageColorization3D(
+            use_attention=False,
+            base_features_3d=base_features_3d,
+            num_slices=num_slices
+        )
     elif model_type == 'attention':
-        return MedicalImageColorization3D(use_attention=True, **kwargs)
+        return MedicalImageColorization3D(
+            use_attention=True,
+            base_features_3d=base_features_3d,
+            num_slices=num_slices
+        )
     elif model_type == 'lightweight':
-        return LightweightColorization3D(**kwargs)
+        return LightweightColorization3D(num_slices=num_slices)
     else:
         raise ValueError(f"Unknown model type: {model_type}")
 
